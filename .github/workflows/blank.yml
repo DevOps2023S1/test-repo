@@ -9,7 +9,7 @@ jobs:
     - name: trigger single Job
       uses: appleboy/jenkins-action@master
       with:
-        url: "http://ec2-44-203-186-42.compute-1.amazonaws.com:8080"
+        url: "http://44.204.35.175:8080"
         user: "git-user"
-        token: ${{ secrets.TOKEN }}
+        token: 11d25e075035d94b3e77ec823b6f8f7c55
         job: "build-orders-service"
