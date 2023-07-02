@@ -22,9 +22,13 @@ jobs:
             job_status=$(curl -s "http://ec2-23-22-162-149.compute-1.amazonaws.com:8080/job/ci-build-service/lastBuild/api/json" \
               --user "admin:11e5dc717eb1a0d1d7481aaa1b8c14754f" \
               | jq -r '.result')
-            if [[ $job_status == "SUCCESS" || $job_status == "FAILURE" || $job_status == "ABORTED" ]]; then
-              echo "El job ha finalizado con estado: $job_status"
-              break
+            if  [[ $job_status == "SUCCESS" ]]; 
+              then
+                echo "El job ha finalizado correctamente"
+                break
+              else
+                echo "Job error: $job_status"
+                exit 2
             fi
             sleep 10
           done
