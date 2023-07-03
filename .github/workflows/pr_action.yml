@@ -4,16 +4,21 @@ on:
   pull_request:
     types:
       - opened
+      - synchronize
   push:
-    branches:
+    branches-ignore:
       - '*'
-      - '!master'
 
 jobs:
   jenkins_job:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Comprobar si hay PR abierto
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            exit 0
+          fi
       - name: Invocando a Jenkins
         id: jenkins
         run: |
