@@ -4,20 +4,25 @@ on:
   pull_request:
     types:
       - opened
+      - synchronize
   push:
-    branches:
+    branches-ignore:
       - '*'
-      - '!master'
 
 jobs:
   jenkins_job:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Comprobar si hay PR abierto
+        run: |
+          if [ "${{ github.event_name }}" != "pull_request" ]; then
+            exit 0
+          fi
       - name: Invocando a Jenkins
         id: jenkins
         run: |
-          curl -X POST "http://ec2-23-22-162-149.compute-1.amazonaws.com:8080/job/ci-build-service/buildWithParameters?service_name=orders-service&type=release&delay=0sec" --user "admin:11e5dc717eb1a0d1d7481aaa1b8c14754f"
+          curl -X POST "http://ec2-23-22-162-149.compute-1.amazonaws.com:8080/job/ci-build-service/buildWithParameters?service_name=orders-service&type=test&delay=0sec" --user "admin:11e5dc717eb1a0d1d7481aaa1b8c14754f"
 
       - name: Progreso
         run: |
@@ -40,7 +45,3 @@ jobs:
               echo "Job error: $status"
               exit 1
           fi
-      - name: Protect Pull Request
-        uses: artemnovichkov/pull-request-protect@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
