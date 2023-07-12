@@ -16,6 +16,7 @@ jobs:
     steps:
       - name: Comprobar si hay PR abierto
         run: |
+          echo ${{ github.event_name }}
           if [ "${{ github.event_name }}" != "pull_request" ]; then
             exit 0
           fi
