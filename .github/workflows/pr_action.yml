@@ -5,24 +5,16 @@ on:
     types:
       - opened
       - synchronize
-  push:
-    branches-ignore:
-      - '*'
 
 jobs:
   jenkins_job:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Comprobar si hay PR abierto
-        run: |
-          if [ "${{ github.event_name }}" != "pull_request" ]; then
-            exit 0
-          fi
       - name: Invocando a Jenkins
         id: jenkins
         run: |
-          curl -X POST "http://ec2-23-22-162-149.compute-1.amazonaws.com:8080/job/ci-build-service/buildWithParameters?service_name=orders-service&image_type=test&branch_name=${github.head_ref}&delay=0sec" --user "admin:11e5dc717eb1a0d1d7481aaa1b8c14754f"
+          curl -X POST "http://ec2-23-22-162-149.compute-1.amazonaws.com:8080/job/ci-build-service/buildWithParameters?service_name=orders-service&image_type=test&branch_name=${{github.head_ref}}&delay=0sec" --user "admin:11e5dc717eb1a0d1d7481aaa1b8c14754f"
 
       - name: Progreso
         run: |
